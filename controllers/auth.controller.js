@@ -1,4 +1,5 @@
 const {createUser, generateAuthToken, signInWithEmailAndPassword}=require("../services/auth.service")
+const { registerEmail } = require("../services/email.service")
 
 
 const authController= {
@@ -13,6 +14,7 @@ const authController= {
     try{
       const user=await createUser(req.body.email,req.body.password)
       const token=await generateAuthToken(user)
+      await registerEmail(req.body.email,user)
       res.cookie("x-token-access",token).status(200).send({user,token})
     }catch(error){
       next(error)

@@ -8,7 +8,7 @@ const createUser= async(email,password)=>{
     await user.save()
     return user
   }catch(error){
-    next( error)
+    throw( error)
   }
 }
 
@@ -28,7 +28,7 @@ const signInWithEmailAndPassword=async (email,password)=>{
   }
   return user
   }catch(error){
-    next(error)
+    throw(error)
   }
 }
 

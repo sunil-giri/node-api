@@ -53,6 +53,13 @@ userSchema.methods.genAuthToken=function(){
   return token
 }
 
+userSchema.methods.generateRegisterToken = function(){
+  let user = this;
+  const userObj = { sub: user._id.toHexString() };
+  const token = jwt.sign(userObj, process.env.DB_SECRET,{ expiresIn:'10h'});
+  return token;
+}
+
 userSchema.methods.comparePassword = async function (candidatePassword) {
   const user = this;
   const match = await bcrypt.compare(candidatePassword, user.password);
