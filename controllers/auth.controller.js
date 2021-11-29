@@ -24,8 +24,15 @@ const authController= {
       if(!user){
         throw new Error
       }
-      
-      res.status(200).send({user})
+      const token = await generateAuthToken(user);
+      res.cookie("x-access-token",token).status(200).send({user})
+    }catch(error){
+      throw(error)
+    }
+  },
+  async isauth(req,res,next){
+    try{
+      res.json({working:"yes"})
     }catch(error){
       throw(error)
     }
