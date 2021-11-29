@@ -2,6 +2,7 @@ const {User} =require("../models/user")
 require("dotenv").config()
 
 const {Strategy:JwtStrategy,ExtractJwt}=require("passport-jwt")
+const { findUserById } = require("../services/user.service")
 
 const jwtOptions={
   secretOrKey: process.env.DB_SECRET,
@@ -11,7 +12,7 @@ const jwtOptions={
 const jwtVerify=async(payload,done)=>{
   try{
     
-    const user= await User.findById(payload.sub)
+    const user= await findUserById(payload.sub)
     
     if(!user){
       return done(null,false)

@@ -4,4 +4,7 @@ const findUserByEmail=async(email)=>{
   return await User.findOne({email})
 }
 
-module.exports={findUserByEmail}
+const findUserById=async(id)=>{
+  return await User.findById(id)
+}
+module.exports={findUserByEmail,findUserById}

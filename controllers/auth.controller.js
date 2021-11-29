@@ -15,26 +15,23 @@ const authController= {
       const token=await generateAuthToken(user)
       res.cookie("x-token-access",token).status(200).send({user,token})
     }catch(error){
-      throw(error)
+      next(error)
     }
   },
   async signin(req,res,next){
     try{
       const user=await signInWithEmailAndPassword(req.body.email,req.body.password)
-      if(!user){
-        throw new Error
-      }
       const token = await generateAuthToken(user);
-      res.cookie("x-access-token",token).status(200).send({user})
+      res.cookie("x-access-token",token).status(200).send({user,token})
     }catch(error){
-      throw(error)
+      next(error)
     }
   },
   async isauth(req,res,next){
     try{
       res.json({working:"yes"})
     }catch(error){
-      throw(error)
+      next(error)
     }
   }
 }

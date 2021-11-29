@@ -1,12 +1,11 @@
 const passport=require("passport")
-// const {ApiError} =require("./apiError")
+const {ApiError} =require("./apiError")
 const httpStatus=require("http-status")
 
 
 const verify=(req,res,resolve,reject)=>async(err,user)=>{
   if(err|| !user){
-    console.log("User",user)
-    return reject(new Error("Sorry Unauthorized"))
+    return reject(new ApiError(httpStatus.UNAUTHORIZED,"Sorry Unauthorized"))
   }
 
 req.user=user
