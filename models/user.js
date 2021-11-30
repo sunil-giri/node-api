@@ -32,7 +32,7 @@ const userSchema=mongoose.Schema({
     trim:true
   },
   posts:{
-    
+    type:Array
   }
 })
 
