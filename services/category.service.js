@@ -4,7 +4,6 @@ const Category = require("../models/category")
 const Post = require("../models/posts")
 const Comment=require("../models/comment")
 const User = require("../models/user")
-const mongooseAggregatePaginate = require("mongoose-aggregate-paginate-v2")
 const mongoose = require("mongoose")
 
 
@@ -21,7 +20,7 @@ const categoryService={
       throw(error)
     }
   },
-  async createPost(title,ctgy,userid){
+  async createPost(title,ctgy,userid,files){
     try{
       const category=await Category.findOne({name:ctgy})
       const user=await User.findById(userid)
@@ -31,7 +30,15 @@ const categoryService={
       if(!category){
         throw new ApiError(httpStatus.FORBIDDEN,"Category does not exists!")
       }
-      const post= new Post({title,category:ctgy,user:userid})
+      let imagesPaths = [];
+      const basePath = `http://localhost:3000/public/uploads/`;
+
+      if (files) {
+        files.map((file) => {
+            imagesPaths.push(`${basePath}${file.filename}`);
+        });
+      }
+      const post= new Post({title,category:ctgy,user:userid,images:imagesPaths})
       await  post.save()
       category.posts=[...category.posts,post]
       await category.save()

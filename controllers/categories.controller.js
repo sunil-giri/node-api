@@ -13,7 +13,7 @@ const categoryController={
   },
   async createPost(req,res,next){
     try{
-      const post= await categoryService.createPost(req.body.title,req.body.category,req.user._id)
+      const post= await categoryService.createPost(req.body.title,req.body.category,req.user._id,req.files)
       res.status(httpStatus.CREATED).send({post})
     }catch(error){
       next(error)
