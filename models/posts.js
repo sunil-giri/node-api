@@ -1,4 +1,6 @@
 const mongoose=require("mongoose")
+const aggregatePaginate=require("mongoose-aggregate-paginate-v2")
+
 
 const postSchema=mongoose.Schema({
   title:{
@@ -29,6 +31,8 @@ const postSchema=mongoose.Schema({
     required:true
   }
 })
+
+postSchema.plugin(aggregatePaginate)
 
 const posts=mongoose.model("Posts",postSchema)
 

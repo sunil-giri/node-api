@@ -26,6 +26,14 @@ const categoryController={
     }catch(error){
       next(error)
     }
+  },
+  async paginatePosts(req,res,next){
+    try{
+      const posts=await categoryService.paginatePosts(req)
+      res.json(posts)
+    }catch(error){
+      next(error)
+    }
   }
 }
 

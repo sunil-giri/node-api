@@ -4,6 +4,8 @@ const Category = require("../models/category")
 const Post = require("../models/posts")
 const Comment=require("../models/comment")
 const User = require("../models/user")
+const mongooseAggregatePaginate = require("mongoose-aggregate-paginate-v2")
+const mongoose = require("mongoose")
 
 
 const categoryService={
@@ -52,6 +54,40 @@ const categoryService={
       await post.save()
       await comment.save()
       return comment
+    }catch(error){
+      throw error
+    }
+  },
+  async paginatePosts(req){
+    try{
+
+      let aggregateQuery=[]
+
+      if(req.body.keywords && req.body.keywords !=''){
+        const re=new RegExp(`${req.body.keywords}`,'gi')
+        aggregateQuery.push({
+          $match:{title:{$regex :re}}
+        })
+      }
+
+
+      if(req.body.category && req.body.category !==''){
+        let categoryArray=req.body.category.map((item)=>{
+            mongoose.Types.ObjectId(item)
+        })
+        aggregateQuery.push({
+          $match:{category:{$in:categoryArray}}
+        })
+      }
+
+      let aggQuery=Post.aggregate(aggregateQuery)
+      const options={
+        page:req.body.page,
+        limit:9,
+        sort:{date:"desc"}
+      }
+      const posts=await Post.aggregatePaginate(aggQuery,options)
+      return posts
     }catch(error){
       throw error
     }
